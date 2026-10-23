@@ -4,8 +4,8 @@ Can information around an S&P 500 earnings release predict the stock's reaction?
 three questions: the **direction** of the abnormal return, its **signed size**, and the
 **size of the move** regardless of sign.
 
-**Status: work in progress.** Price and text experiments are done on validation data. The test
-period (2024-2026) has not been used. Next: beta-adjusted targets, then a single frozen test evaluation.
+**Status: v1 complete.** The evaluation plan was frozen in `docs/frozen_plan.md` before the test
+period (2024-2026) was scored. Result: no detectable signal. See "Final test-set results" below.
 
 ## Data
 
@@ -83,7 +83,7 @@ Averages: in 2019-2021 (not used to choose any settings) text AUC minus 0.5 is +
 [+0.018, +0.044], but text minus ticker-only is +0.0014 [-0.007, +0.010]. In 2022-2023
 (already examined) text minus ticker-only is +0.0184 [+0.008, +0.028].
 
-**Conclusion so far:**
+**Validation-period conclusion (before the test set):**
 - Text ranks direction slightly better than chance in every year (AUC about 0.51 to 0.55), but
   it cannot be turned into better probabilities (log-loss does not improve).
 - In the years not used for model selection, a model that sees only the ticker does equally
@@ -91,6 +91,30 @@ Averages: in 2019-2021 (not used to choose any settings) text AUC minus 0.5 is +
 - Text adds nothing for the size of the move.
 - Any extra signal from language beyond identity is at most about 0.01 AUC in the fresh years,
   and is only clearly positive in the period already examined.
+
+## Final test-set results (2024-2026, scored once)
+
+The plan in `docs/frozen_plan.md` was committed before scoring (see the commit history). Models were
+trained on 2016-2023 and scored on 5,392 test events across 140 weeks. Full report: `docs/test_results.txt`.
+
+| Comparison | Result | 95% interval |
+|---|---|---|
+| Direction: text AUC minus 0.5 | +0.0022 | [-0.012, +0.018] |
+| Direction: ticker-only AUC minus 0.5 | -0.0003 | [-0.017, +0.016] |
+| Direction: text minus ticker-only (paired) | +0.0025 | [-0.007, +0.012] |
+| Direction: log-loss, text minus always-up | +0.0021 | [+0.0003, +0.0037] |
+| Size of move: MAE, baseline+text minus baseline | +0.0001 | [-0.0000, +0.0002] |
+| Signed size: R2 of the training mean | -0.0004 | |
+| Direction, beta-adjusted target: text AUC minus 0.5 | +0.0012 | [-0.013, +0.016] |
+
+The pre-registered success criterion (text AUC interval above 0.5 **and** above the ticker-only control)
+was not met. The text model's probabilities are slightly worse than always predicting "up".
+
+**Conclusion:** neither price history nor earnings-release text predicted the direction or the
+size of the reaction beyond simple baselines. The small text effect seen on the 2022-2023 validation
+period did not replicate out of sample, consistent with a validation-period artifact (not proven).
+The interval allows an effect of up to about 0.018 AUC, which is too small to use, and this is
+one test period.
 
 ## Known limitations
 
@@ -109,6 +133,9 @@ Averages: in 2019-2021 (not used to choose any settings) text AUC minus 0.5 is +
   starting price. A trading strategy would need to enter after the release.
 - **Selection effects:** several comparisons were run on the 2022-2023 validation period, so
   those intervals are somewhat optimistic. Week-block intervals assume independent weeks.
+- **The test set was used once.** No model was changed after seeing it. No backtest was built: with no
+  detectable signal, a trading simulation of it would not be meaningful.
+- **One test period (2024-2026).** The result says nothing about other market conditions.
 
 ## Reproduce
 
@@ -129,5 +156,6 @@ uv run python -m mep.models.text_baseline
 uv run python scripts/text_uncertainty.py
 uv run python scripts/identity_control.py
 uv run python scripts/walk_forward.py
+uv run python scripts/final_test.py dry    # practice mode; the real run refuses to repeat
 uv run pytest
 ```

@@ -1,0 +1,26 @@
+FINAL TEST RUN: 2016-2023 train, 2024-2026 test
+train 14549 | test 5392 in 140 weeks | events without text dropped: 62
+
+DIRECTION (target y_dir)
+always-up accuracy 0.506 | text model accuracy 0.510
+text model AUC minus 0.5                                   +0.0022   95% CI [-0.0121, +0.0176]
+ticker-only AUC minus 0.5                                  -0.0003   95% CI [-0.0165, +0.0162]
+text minus ticker-only (paired AUC)                        +0.0025   95% CI [-0.0074, +0.0122]
+log-loss: text model minus always-up baseline              +0.0021   95% CI [+0.0003, +0.0037]
+Pre-registered criterion (both intervals above zero): NO DETECTABLE SIGNAL
+
+SIZE OF MOVE (target y_abs)
+company-history baseline           MAE 0.0320 | R2 0.1267
+baseline + text residual           MAE 0.0320 | R2 0.1370
+MAE: baseline+text minus baseline                          +0.0001   95% CI [-0.0000, +0.0002]
+
+SIGNED SIZE (target abn_ret), predict the training mean
+MAE 0.0521 | R2 -0.0004
+
+BY WINDOW LENGTH (point estimates only)
+window_days=1: n=2972 | text AUC 0.512 | ticker AUC 0.504 | size MAE baseline 0.0290 vs +text 0.0289
+window_days=2: n=2420 | text AUC 0.497 | ticker AUC 0.496 | size MAE baseline 0.0357 vs +text 0.0358
+
+ROBUSTNESS: beta-adjusted direction (target y_dir_beta), not primary
+text model AUC minus 0.5                                   +0.0012   95% CI [-0.0129, +0.0164]
+text minus ticker-only (paired AUC)                        +0.0027   95% CI [-0.0067, +0.0128]
