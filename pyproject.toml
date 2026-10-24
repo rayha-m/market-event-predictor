@@ -1,8 +1,8 @@
 [project]
 name = "mep"
 version = "1.0.0"
-   description = "Pre-registered test of whether S&P 500 earnings-release text and price history predict the stock reaction."
-   readme = "README.md"
+description = "Pre-registered test of whether S&P 500 earnings-release text and price history predict the stock reaction."
+readme = "README.md"
 authors = [
     { name = "Rayha Manam", email = "206941031+rayha-m@users.noreply.github.com" }
 ]
