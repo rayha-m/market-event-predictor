@@ -133,8 +133,7 @@ one test period.
   starting price. A trading strategy would need to enter after the release.
 - **Selection effects:** several comparisons were run on the 2022-2023 validation period, so
   those intervals are somewhat optimistic. Week-block intervals assume independent weeks.
-- **The test set was used once.** No model was changed after seeing it. No backtest was built: with no
-  detectable signal, a trading simulation of it would not be meaningful.
+- **The test set was used once** for the frozen direction and size evaluation. No model was changed after seeing it.
 - **One test period (2024-2026).** The result says nothing about other market conditions.
 
 ## Reproduce
