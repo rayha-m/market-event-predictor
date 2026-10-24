@@ -1,0 +1,33 @@
+FINAL BACKTEST RUN: both periods, results saved and locked
+Rule: sign of reaction-window abnormal return; enter at window close, exit after 5 trading days
+
+===== 2016-2023 (development, code check) =====
+trades 14609 | dropped (no price / exit past data end): 0
+all trades, cost 0 bps per side                  +6.9 bps   95% CI [    -0.2,    +14.1]
+all trades, cost 5 bps per side                 -13.1 bps   95% CI [   -20.2,     -5.9]
+all trades, cost 10 bps per side                -33.1 bps   95% CI [   -40.2,    -25.9]
+Pre-registered criterion (interval above zero at 10 bps): NOT PROFITABLE AFTER COSTS
+win rate 0.460 | check: gross minus net = 40.0 bps (should be 40.0)
+-- long stock, short SPY: 7647 trades
+   cost 0 bps per side                          +13.7 bps   95% CI [    -2.3,    +30.8]
+   cost 10 bps per side                         -26.3 bps   95% CI [   -42.3,     -9.2]
+-- short stock, long SPY: 6962 trades
+   cost 0 bps per side                           -0.5 bps   95% CI [   -15.5,    +13.1]
+   cost 10 bps per side                         -40.5 bps   95% CI [   -55.5,    -26.9]
+weekly cohorts (rough, ignores overlap): Sharpe -2.08 | max drawdown -83.1% | trades per year 1836
+
+===== 2024-2026 (second look at an already-scored period) =====
+trades 5391 | dropped (no price / exit past data end): 3
+all trades, cost 0 bps per side                  -5.6 bps   95% CI [   -20.3,     +8.7]
+all trades, cost 5 bps per side                 -25.6 bps   95% CI [   -40.3,    -11.3]
+all trades, cost 10 bps per side                -45.6 bps   95% CI [   -60.3,    -31.3]
+Pre-registered criterion (interval above zero at 10 bps): NOT PROFITABLE AFTER COSTS
+win rate 0.457 | check: gross minus net = 40.0 bps (should be 40.0)
+-- long stock, short SPY: 2725 trades
+   cost 0 bps per side                          -15.3 bps   95% CI [   -54.5,    +21.0]
+   cost 10 bps per side                         -55.3 bps   95% CI [   -94.5,    -19.0]
+-- short stock, long SPY: 2666 trades
+   cost 0 bps per side                           +4.2 bps   95% CI [   -37.3,    +40.9]
+   cost 10 bps per side                         -35.8 bps   95% CI [   -77.3,     +0.9]
+weekly cohorts (rough, ignores overlap): Sharpe -2.09 | max drawdown -50.0% | trades per year 1967
+
