@@ -41,8 +41,8 @@ unique filings (62 had no exhibit).
 - **Controls:** a ticker-only model, to separate "what the release says" from "which company it is".
 - **Uncertainty:** week-level block bootstrap (many companies report in the same week);
   walk-forward evaluation by year, retraining on earlier years only.
-- **Tests:** 7 tests cover the timing rule, a no-lookahead check on every rolling price feature,
-  and the bootstrap.
+- **Tests:** 13 tests cover the timing rule, a no-lookahead check on every rolling price feature
+  and on the beta estimate, the bootstrap, and the backtest trade math and costs.
 
 ## Results (validation data, no test-set use)
 
@@ -116,6 +116,27 @@ period did not replicate out of sample, consistent with a validation-period arti
 The interval allows an effect of up to about 0.018 AUC, which is too small to use, and this is
 one test period.
 
+## Backtest (pre-registered, scored once)
+
+The rule and costs were fixed in `docs/frozen_backtest_plan.md` before any backtest ran. The rule has no
+fitted parameters: take the sign of the reaction-window abnormal return, go long (or short) the stock
+against SPY at the window's closing price, and exit 5 trading days later. Costs: 10 basis points per
+side on each of four fills (40 bps round trip), with 0 and 5 bps also reported. Full report:
+`docs/backtest_results.txt`.
+
+| Period | Gross per trade | Net at 10 bps per side | Pre-registered criterion |
+|---|---|---|---|
+| 2016-2023 (14,609 trades) | +6.9 bps [-0.2, +14.1] | -33.1 bps [-40.2, -25.9] | Not profitable |
+| 2024-2026 (5,391 trades, second look) | -5.6 bps [-20.3, +8.7] | -45.6 bps [-60.3, -31.3] | Not profitable |
+
+Intervals are 95% week-block bootstrap intervals. The 2024-2026 period had already been scored once for
+the direction and size models, so it is a second look and not a clean test.
+
+**Conclusion:** the gross edge is indistinguishable from zero, and after realistic costs the strategy loses
+money in both periods. This is evidence about one simple rule, one holding period and a flat cost model
+(no slippage, borrow cost or market impact), not about all possible strategies. Weekly-cohort Sharpe and
+drawdown figures (about -2.1 Sharpe) are rough because the cohorts ignore overlapping holding periods.
+
 ## Known limitations
 
 - **Survivorship bias:** the universe is today's S&P 500.
@@ -133,7 +154,8 @@ one test period.
   starting price. A trading strategy would need to enter after the release.
 - **Selection effects:** several comparisons were run on the 2022-2023 validation period, so
   those intervals are somewhat optimistic. Week-block intervals assume independent weeks.
-- **The test set was used once** for the frozen direction and size evaluation. No model was changed after seeing it.
+- **The test set was used once** for the frozen direction and size evaluation. No model was changed after seeing it. 
+- **The backtest is one rule.** It tests whether the reaction continues, not a model-driven signal, since no model showed signal. It    ignores slippage, borrow costs and capacity.
 - **One test period (2024-2026).** The result says nothing about other market conditions.
 
 ## Reproduce
@@ -156,5 +178,6 @@ uv run python scripts/text_uncertainty.py
 uv run python scripts/identity_control.py
 uv run python scripts/walk_forward.py
 uv run python scripts/final_test.py dry    # practice mode; the real run refuses to repeat
+uv run python scripts/backtest.py dry     # practice mode; the real run refuses to repeat
 uv run pytest
 ```
