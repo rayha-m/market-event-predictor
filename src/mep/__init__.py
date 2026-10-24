@@ -1,2 +1,1 @@
-def main() -> None:
-    print("Hello from mep!")
+"""Market-Moving Event Predictor: an earnings-event study on S&P 500 stocks."""
