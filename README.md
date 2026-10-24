@@ -162,6 +162,7 @@ drawdown figures (about -2.1 Sharpe) are rough because the cohorts ignore overla
 
 Requires [uv](https://docs.astral.sh/uv/) and a `.env` file containing
 `SEC_USER_AGENT="Your Name your.email@example.com"` (SEC requires it).
+Create it with: `echo 'SEC_USER_AGENT="Your Name your.email@example.com"' > .env`
 
 ```
 uv sync
