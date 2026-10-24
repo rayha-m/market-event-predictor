@@ -1,5 +1,7 @@
 # Market-Moving Event Predictor
 
+![tests](https://github.com/rayha-m/market-event-predictor/actions/workflows/tests.yml/badge.svg)
+
 Can information around an S&P 500 earnings release predict the stock's reaction? One event table,
 three questions: the **direction** of the abnormal return, its **signed size**, and the
 **size of the move** regardless of sign.
