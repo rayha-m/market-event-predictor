@@ -33,7 +33,7 @@ unique filings (62 had no exhibit).
 - **Targets:** `y_dir` (abnormal return > 0), `abn_ret` (signed), `y_abs` (absolute size).
 - **Filters:** ECHO excluded (no earnings 8-Ks since 2017); ticker-years with under 3 events
   dropped; events with under 252 trading days of prior prices dropped.
-- **Split by date, never random:** train 2016-2021, validation 2022-2023, test 2024-2026 (untouched).
+- **Split by date, never random:** train 2016-2021, validation 2022-2023, test 2024-2026 (scored once at the end, with models retrained on 2016-2023; see below).
 - **Baselines:** always "up"; training mean; a company's own past average absolute move
   (earlier events only).
 - **Price features:** momentum, volatility, volume, distance from 52-week high, SPY context,
@@ -147,8 +147,7 @@ drawdown figures (about -2.1 Sharpe) are rough because the cohorts ignore overla
   adds a day of noise (2-day moves are about 30% larger on average).
 - **Companies that changed legal entities** (e.g. XOM, BLK, BG) have short histories under their
   current SEC ID and are mostly excluded.
-- **Abnormal return is not beta-adjusted** (stock minus SPY). Company identity may predict
-  direction partly through market sensitivity. Untested; next step.
+- **Abnormal return is simple** (stock minus SPY). A beta-adjusted target (each stock's beta from its prior 252 trading days, shrunk toward 1) was tested as a robustness check and changed almost nothing: the ticker-only AUC minus 0.5 in 2019-2021 went from +0.030 to +0.029. So market sensitivity does not explain why company identity predicted direction in those years. The cause is untested; survivorship bias in the stock universe is one possibility.
 - **Press releases still contain company names, executive names and contact details**, which a
   text model can use to identify the company. The ticker-only control addresses this only partly,
   and sector vocabulary is not separated from language.
@@ -172,6 +171,7 @@ uv run python -m mep.data.prices
 uv run python -m mep.data.events
 uv run python -m mep.data.event_table
 uv run python -m mep.features.price_features
+uv run python -m mep.features.beta
 uv run python scripts/fetch_press_releases.py     # about 4 hours, resumable
 uv run python -m mep.models.baselines
 uv run python -m mep.models.first_models
@@ -180,6 +180,7 @@ uv run python -m mep.models.text_baseline
 uv run python scripts/text_uncertainty.py
 uv run python scripts/identity_control.py
 uv run python scripts/walk_forward.py
+uv run python scripts/walk_forward_beta.py
 uv run python scripts/final_test.py dry    # practice mode; the real run refuses to repeat
 uv run python scripts/backtest.py dry     # practice mode; the real run refuses to repeat
 uv run pytest
