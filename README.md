@@ -6,7 +6,7 @@ Can information around an S&P 500 earnings release predict the stock's reaction?
 three questions: the **direction** of the abnormal return, its **signed size**, and the
 **size of the move** regardless of sign.
 
-**Status: v1 complete.** The evaluation plan was frozen in `docs/frozen_plan.md` before the test
+**Status: complete.** The evaluation plan was frozen in `docs/frozen_plan.md` before the test
 period (2024-2026) was scored. Result: no detectable signal. See "Final test-set results" below.
 
 ![Test-set results: direction AUC differences and backtest returns, all with 95% intervals](docs/results.png)
