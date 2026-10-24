@@ -9,6 +9,10 @@ three questions: the **direction** of the abnormal return, its **signed size**, 
 **Status: v1 complete.** The evaluation plan was frozen in `docs/frozen_plan.md` before the test
 period (2024-2026) was scored. Result: no detectable signal. See "Final test-set results" below.
 
+![Test-set results: direction AUC differences and backtest returns, all with 95% intervals](docs/results.png)
+
+*Left: the validation-period text edge (top row) did not replicate on the 2024-2026 test set. Right: no gross edge in the backtest, and losses after costs. Values are copied from `docs/test_results.txt` and `docs/backtest_results.txt`.*
+
 ## Data
 
 | Source | What | How |
@@ -183,5 +187,6 @@ uv run python scripts/walk_forward.py
 uv run python scripts/walk_forward_beta.py
 uv run python scripts/final_test.py dry    # practice mode; the real run refuses to repeat
 uv run python scripts/backtest.py dry     # practice mode; the real run refuses to repeat
+uv run python scripts/make_chart.py
 uv run pytest
 ```
